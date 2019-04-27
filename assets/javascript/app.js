@@ -26,7 +26,7 @@ $(document).ready(function () {
     L.mapquest.key = 'FuQjru92zZdcmkhC0D99Fp9Ye0ZaEAGa'; // my mapQuest API key
 
     // 'mapid' refers to a <div> element with the ID map
-    L.mapquest.map('mapid', {
+    L.mapquest.map('map', {
         center: [lat, long],
         layers: L.mapquest.tileLayer('map'), // this will be updated when we have a heatmap layer as well
         zoom: zoom
