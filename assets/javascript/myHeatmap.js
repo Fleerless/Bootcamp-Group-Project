@@ -19,13 +19,6 @@ var heatmapInstance = h337.create(config);
     console.log("Points: " ,allLatLong);
     // don't forget to include leaflet-heatmap.js
 
-var baseLayer = L.tileLayer(
-  'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-    attribution: '...',
-    maxZoom: 18
-  }
-);
-
 var cfg = {
   // radius should be small ONLY if scaleRadius is true (or small radius is intended)
   // if scaleRadius is false it will be the constant radius used in pixels
@@ -38,17 +31,15 @@ var cfg = {
   //   (there will always be a red spot with useLocalExtremas true)
   "useLocalExtrema": true,
   // which field name in your data represents the latitude - default "lat"
-  latField: 'lat',
+  latField: 'latitude',
   // which field name in your data represents the longitude - default "lng"
-  lngField: 'lng',
+  lngField: 'longitude',
   // which field name in your data represents the data value - default "value"
   valueField: 'count'
 };
 
 
 var heatmapLayer = new HeatmapOverlay(cfg);
-console.log("config: ", cfg);
-console.log("Heat Map Layer 1: ", heatmapLayer)
 
 var lat = 39.7392; // this will be fed from the zomato results
 var long = -104.9903; // this will be fed from the zomato results
@@ -59,9 +50,15 @@ L.mapquest.key = 'FuQjru92zZdcmkhC0D99Fp9Ye0ZaEAGa'; // my mapQuest API key
 L.mapquest.map('spongebob', {
 	center: [lat, long],
 	layers: [L.mapquest.tileLayer('map'), heatmapLayer], // this will be updated when we have a heatmap layer as well
-	zoom: zoom
+  zoom: zoom,
+  
 });
-});
-console.log("Heat Map Layer 2: ", heatmapLayer)
+console.log(L.mapquest.tileLayer('map'));
+
+console.log("Heat Map Layer: ", heatmapLayer);
+console.log("All-Lat-Long: ", allLatLong)
 heatmapLayer.setData(allLatLong);
+console.log("Heatmap Data-Set: ", heatmapLayer);
+});
+
 

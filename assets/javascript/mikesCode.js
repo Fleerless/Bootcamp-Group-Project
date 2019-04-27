@@ -1,6 +1,5 @@
-var allLatLong = [];
+var allLatLong = {data: []};
 $(document).ready(function(){
-
     $.ajax({
         method: 'GET',
         url: 'https://developers.zomato.com/api/v2.1/search?entity_id=305&entity_type=city&lat=39.742043&lon=-104.991531&radius=400&sort=real_distance&order=asc',
@@ -12,9 +11,9 @@ $(document).ready(function(){
             for (var i =0; i<info.restaurants.length;i++){
                 var latdata = info.restaurants[i].restaurant.location.latitude;
                 var longData = info.restaurants[i].restaurant.location.longitude;
-                var count = 1;
-                var coordinates = {"latitude": latdata, "longitude": longData, "count": count};
-                allLatLong.push(coordinates);                  
+                var count = 8;
+                var coordinates = {"lat": latdata, "lng": longData, "count": count};
+                allLatLong.data.push(coordinates);                  
             }
             // console.log(allLatLong);
             // for(i in info.restaurants){ //perhaps i got too cute trying to combine lat and long right out of the object
