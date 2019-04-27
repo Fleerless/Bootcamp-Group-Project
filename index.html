@@ -5,13 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+        integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+        crossorigin="" />
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+        integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+        crossorigin=""></script>
+    <!-- mapquest JS goes here -->
+    <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest-maps.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest-maps.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="assets/javascript/heatmap.js-2.0.5/build/heatmap.min.js"></script>
+    <script src="assets/javascript/leaflet-heatmap.js"></script>
+    <script src="assets/javascript/mikesCode.js"></script>
     <script src="assets/javascript/myHeatmap.js"></script>
 </head>
 <body>
     <div id='container' style='position: relative; height: 742px'>
-        <canvas id="heatMap" width = "1024" height = "742" style="position:absolute; left: 0; top: 0"></canvas>
+        <canvas id="heat-map" width = "1024" height = "742" style="position:absolute; left: 0; top: 0"></canvas>
     </div>
+    <div id="spongebob"></div>
 </body>
 </html>
