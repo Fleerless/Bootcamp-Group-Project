@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>Restorant</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <!-- Firebase Reference -->
+  <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" type="text/css" href="assets/style.css">
+
+  <!-- Annimate if we need it -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+
+
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- Jumbotron for Title -->
+    <div class="jumbotron">
+      <h1>
+        <strong>
+          zomato website
+        </strong>
+      </h1>
+      <p>searching a good place,too eat!</p>
+
+    </div>
+
+    <div class="row">
+      <div class="col-sm-6">
+        <br>
+        <div class="panel panel-warning">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <strong>
+                </i> Search Your food</strong>
+            </h3>
+          </div>
+          <div class="panel-body">
+
+            <form role="form">
+
+              <div class="form-group">
+                <label for="style">Restorant Name:</label>
+                <input type="text" class="form-control" id="plate-style">
+              </div>
+
+              <button type="submit" class="btn btn-warning" id="run-search">
+                </i> Search</button>
+
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="col-sm-6" id="userAccount">
+        <div class="panel panel-warning">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <strong>
+                </i> Create User Account</strong>
+            </h3>
+          </div>
+          <div class="panel-body3">
+            <input id="txtEmail" type="email" placeholder="Email">
+
+            <input id="txtPassword" type="password" placeholder="Password">
+
+            <button id="btnLogin" class="btn btn-action">
+              Log in
+            </button>
+
+            <button id="btnSignUp" class="btn btn-secondary">
+              Sign Up
+            </button>
+            <button id="btnLogout" class="btn btn-action hide">
+              Log out
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+          
+      <div class="col-sm-6">
+          <div id="map"></div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+          <br>
+  
+          <div class="panel panel-warning">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                <strong>
+                  </i> map area</strong>
+              </h3>
+            </div>
+
+          <!--//Hold each of the resulting options -->
+          <div class="panel-body2" id="food-section2">
+            <table class="table" id="food-table2">
+            
+
+              <tbody id="food-body2">
+                <div class="col-lg-4" id="name-favorites"></div>
+                <div class="col-lg-4" id="location-favorites"></div>
+                <div class="col-lg-4" id="thoughts-favorites"></div>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+
+    <!-- Add food -->
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="panel panel-warning">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <strong>Add food</strong>
+            </h3>
+          </div>
+          <div class="panel-body">
+            <form>
+              <div class="form-group">
+                <label for="resorant-name"> All favorite food</label>
+                <input class="form-control" id="food-name" type="text">
+              </div>
+              <div class="form-group">
+                <label for="location">Where'd i get it?</label>
+                <input class="form-control" id="location" type="text">
+              </div>
+              
+
+              <button class="btn btn-warning" id="add-food" type="submit">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+  <!-- The Modal -->
+  <div id="food-popup" class="modal">
+
+    <!-- Modal content -->
+    <form class="modal-content animate" >
+      <div class="imgcontainer">
+        <span id="retorant-close" class="close" title="Close Modal">&times;</span>
+      </div>
+
+      <div id="restorant-info"></div>
+    </form>
+
+  </div>
+
+  <script type="text/javascript" src="app.js"></script>
+
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBRoBFgQ8l2qx8Q5JVqkyWcqc3SqcGBuBY&callback=initMap">
+  </script>
+
+</body>
+
+</html>
