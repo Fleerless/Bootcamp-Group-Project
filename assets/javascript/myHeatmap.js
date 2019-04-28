@@ -1,83 +1,95 @@
 $(document).ready(function(){
 
-  $.ajax({
-    method: 'GET',
-    url: 'https://developers.zomato.com/api/v2.1/search?entity_id=305&entity_type=city&lat=39.742043&lon=-104.991531&radius=400&sort=real_distance&order=asc',
-    headers: { 'Accept': 'application/json', 'user-key': '5bb90f13f14bd704f6c55fa5a4cdd8e6' },
-    success: function (info) {
-        // console.log(info);
-       
-        var allLatLong = {data: []};
-
-        for (var i =0; i<info.restaurants.length;i++){
-            var latdata = info.restaurants[i].restaurant.location.latitude;
-            var longData = info.restaurants[i].restaurant.location.longitude;
-            var count = 8;
-            var coordinates = {"latField": parseFloat(latdata), "lngField": parseFloat(longData), "count": parseFloat(count)};
-            allLatLong.data.push(coordinates);                  
+          // heatmap code 
+          var cfg = {
+            // radius should be small ONLY if scaleRadius is true (or small radius is intended)
+            // if scaleRadius is false it will be the constant radius used in pixels
+            "radius": .004, // I had to make this really small. if it's 1 the whole state is red! 
+            "maxOpacity": .8,
+            // scales the radius based on map zoom
+            "scaleRadius": true,
+            // if set to false the heatmap uses the global maximum for colorization
+            // if activated: uses the data maximum within the current map boundaries 
+            //   (there will always be a red spot with useLocalExtremas true)
+            "useLocalExtrema": true,
+            // which field name in your data represents the latitude - default "lat"
+            latField: 'latitude',
+            // which field name in your data represents the longitude - default "lng"
+            lngField: 'longitude',
+            // which field name in your data represents the data value - default "value"
+            valueField: 'count'
         };
 
-        // create configuration object
-var config = {
-  container: document.getElementById('map'),
-  radius: 10,
-  maxOpacity: .5,
-  minOpacity: 0,
-  blur: .75,
-  gradient: {
-    // enter n keys between 0 and 1 here
-    // for gradient color customization
-    '.5': 'blue',
-    '.8': 'red',
-    '.95': 'white'
-  }
-};
-var heatmapInstance = h337.create(config);
-// console.log(heatmapInstance);
-    console.log("Points: " ,allLatLong);
-    // don't forget to include leaflet-heatmap.js
 
-var cfg = {
-  // radius should be small ONLY if scaleRadius is true (or small radius is intended)
-  // if scaleRadius is false it will be the constant radius used in pixels
-  "radius": 2,
-  "maxOpacity": .8, 
-  // scales the radius based on map zoom
-  "scaleRadius": true, 
-  // if set to false the heatmap uses the global maximum for colorization
-  // if activated: uses the data maximum within the current map boundaries 
-  //   (there will always be a red spot with useLocalExtremas true)
-  "useLocalExtrema": true,
-  // which field name in your data represents the latitude - default "lat"
-  latField: 'lat',
-  // which field name in your data represents the longitude - default "lng"
-  lngField: 'lng',
-  // which field name in your data represents the data value - default "value"
-  valueField: 'count'
-};
+        var heatmapLayer = new HeatmapOverlay(cfg); // check console.log to see that heatmapLayer is mutable!!! 
+        console.log("Heatmap Layer: ", heatmapLayer);
 
+        // zomato code
+        var zomatoKey = "c7db9a7567a1e0278cfd9829e1435aa1";
+        var testData = {
+            max: 100,
+            data: []
+        };
 
-var heatmapLayer = new HeatmapOverlay(cfg);
+        // this seems way more complex, but it demonstrates the use of the jQuery .when() method
+        // which can be used to call a function after a response is returned, and get it out of the $.ajax() call
+        
+        var ajax1 = $.ajax({
+            method: "GET",
+            url: "https://developers.zomato.com/api/v2.1/search?entity_id=305&entity_type=city&q=restaurant&start=0",
+            headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
+        }),
+            ajax2 = $.ajax({
+                method: "GET",
+                url: "https://developers.zomato.com/api/v2.1/search?entity_id=305&entity_type=city&q=restaurant&start=20",
+                headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
+            }),
+            ajax3 = $.ajax({
+                method: "GET",
+                url: "https://developers.zomato.com/api/v2.1/search?entity_id=305&entity_type=city&q=restaurant&start=40",
+                headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
+            }),
+            ajax4 = $.ajax({
+                method: "GET",
+                url: "https://developers.zomato.com/api/v2.1/search?entity_id=305&entity_type=city&q=restaurant&start=60",
+                headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
+            }),
+            ajax5 = $.ajax({
+                method: "GET",
+                url: "https://developers.zomato.com/api/v2.1/search?entity_id=305&entity_type=city&q=restaurant&start=80",
+                headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
+            });
 
-var lat = 39.7392; // this will be fed from the zomato results
-var long = -104.9903; // this will be fed from the zomato results
-var zoom = 13; // we can change the initial zoom depending on search radius
+        $.when(ajax1, ajax2, ajax3, ajax4, ajax5).done(function (r1, r2, r3, r4, r5) {
+            console.log("r1: ", r1);
+            // r1 is the response, r1[0] is where the data is in a .when() call. 
+            // check the log for the response 
+            var responseArray = [];
+            responseArray.push(r1[0], r2[0], r3[0], r4[0], r5[0]);
+            responseArray.forEach(function(response) {
+                for (i = 0; i < response.restaurants.length; i++) {
+                var latString = response.restaurants[i].restaurant.location.latitude;
+                var longString = response.restaurants[i].restaurant.location.longitude;
+                var lat = parseFloat(latString);
+                var long = parseFloat(longString);
+                var latLong = { "latitude": lat, "longitude": long, "count": 1 };
+                testData.data.push(latLong);
+            }
+            });
 
-L.mapquest.key = 'FuQjru92zZdcmkhC0D99Fp9Ye0ZaEAGa'; // my mapQuest API key
+            // leaflet code
+            var lat = 39.7392;
+            var long = -104.9903;
+            var zoom = 12;
 
-L.mapquest.map('map', {
-	center: [lat, long],
-	layers: [L.mapquest.tileLayer('map'), heatmapLayer], // this will be updated when we have a heatmap layer as well
-  zoom: zoom,
-  
-});
-console.log(L.mapquest.tileLayer('map'));
-
-console.log("Heat Map Layer: ", heatmapLayer);
-heatmapLayer.setData(allLatLong);
-console.log("Heatmap Data-Set: ", heatmapLayer);
-      }});
-
-});
-
+            L.mapquest.key = 'FuQjru92zZdcmkhC0D99Fp9Ye0ZaEAGa';
+            heatmapLayer.setData(testData);
+            // 'map' refers to a <div> element with the ID map
+            L.mapquest.map('map', {
+                center: [lat, long],
+                layers: [L.mapquest.tileLayer('map'), heatmapLayer],
+                zoom: zoom
+            });
+        });
+      });
 
