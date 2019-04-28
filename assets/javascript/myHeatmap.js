@@ -1,7 +1,25 @@
 $(document).ready(function(){
-// create configuration object
+
+  $.ajax({
+    method: 'GET',
+    url: 'https://developers.zomato.com/api/v2.1/search?entity_id=305&entity_type=city&lat=39.742043&lon=-104.991531&radius=400&sort=real_distance&order=asc',
+    headers: { 'Accept': 'application/json', 'user-key': '5bb90f13f14bd704f6c55fa5a4cdd8e6' },
+    success: function (info) {
+        // console.log(info);
+       
+        var allLatLong = {data: []};
+
+        for (var i =0; i<info.restaurants.length;i++){
+            var latdata = info.restaurants[i].restaurant.location.latitude;
+            var longData = info.restaurants[i].restaurant.location.longitude;
+            var count = 8;
+            var coordinates = {"latField": parseFloat(latdata), "lngField": parseFloat(longData), "count": parseFloat(count)};
+            allLatLong.data.push(coordinates);                  
+        };
+
+        // create configuration object
 var config = {
-  container: document.getElementById('heat-map'),
+  container: document.getElementById('map'),
   radius: 10,
   maxOpacity: .5,
   minOpacity: 0,
@@ -31,9 +49,9 @@ var cfg = {
   //   (there will always be a red spot with useLocalExtremas true)
   "useLocalExtrema": true,
   // which field name in your data represents the latitude - default "lat"
-  latField: 'latitude',
+  latField: 'lat',
   // which field name in your data represents the longitude - default "lng"
-  lngField: 'longitude',
+  lngField: 'lng',
   // which field name in your data represents the data value - default "value"
   valueField: 'count'
 };
@@ -47,7 +65,7 @@ var zoom = 13; // we can change the initial zoom depending on search radius
 
 L.mapquest.key = 'FuQjru92zZdcmkhC0D99Fp9Ye0ZaEAGa'; // my mapQuest API key
 
-L.mapquest.map('spongebob', {
+L.mapquest.map('map', {
 	center: [lat, long],
 	layers: [L.mapquest.tileLayer('map'), heatmapLayer], // this will be updated when we have a heatmap layer as well
   zoom: zoom,
@@ -56,9 +74,10 @@ L.mapquest.map('spongebob', {
 console.log(L.mapquest.tileLayer('map'));
 
 console.log("Heat Map Layer: ", heatmapLayer);
-console.log("All-Lat-Long: ", allLatLong)
 heatmapLayer.setData(allLatLong);
 console.log("Heatmap Data-Set: ", heatmapLayer);
+      }});
+
 });
 
 

@@ -14,7 +14,8 @@ $(document).ready(function(){
                 var count = 8;
                 var coordinates = {"lat": latdata, "lng": longData, "count": count};
                 allLatLong.data.push(coordinates);                  
-            }
+            };
+            console.log("Mike's points: ", allLatLong);
             // console.log(allLatLong);
             // for(i in info.restaurants){ //perhaps i got too cute trying to combine lat and long right out of the object
             //   iterLatLong = info.restaurants[i].restaurant.location.latitude + "," + info.restaurants[i].restaurant.location.longitude;
