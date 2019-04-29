@@ -168,8 +168,6 @@
       
         while (len--) {
           var entry = data[len];
-          console.log("Heatmap data: ", data);
-          console.log("Heatmap Entry: ", entry);
           var latlng = new L.LatLng(entry[latField], entry[lngField]);
           var dataObj = { latlng: latlng };
           dataObj[valueField] = entry[valueField];
