@@ -58,26 +58,40 @@ $(document).ready(function () {
 
         // create a card with button in the saved search area
         var wrapperDiv = $("<div class='card text-center' style='width: 18rem;'>");
+        wrapperDiv.attr("id", key);
         var bodyDiv = $("<div class='card text-center' style='width: 18rem'>");
         var headerTag = $("<h5 class='card-title'>");
         headerTag.attr("id, title" + key);
         headerTag.text(citySearch);
+        var paragraphTag = $("<p class='card-text'>");
+        paragraphTag.text(categorySearch);
         var closeButton = $("<button type='button' class='close align-self-end mr-1' aria-label='Close'>");
-        closeButton.attr("id", "close" + key); // will be used to delete this search from the database
+        closeButton.attr({"data-key": key, "id": "delete-card"}); // will be used to delete this search from the database
         var closeAriaSpan = $("<span aria-hidden='true'>");
         closeAriaSpan.html("&times;");
         var searchButton = $("<button class='btn btn-primary'>");
         searchButton.attr({
-            "id": "search" + key,
+            "id": "saved-search",
             "data-city": citySearch,
             "data-category": categorySearch
         });
-        searchButton.text(citySearch);
+        searchButton.text("Search");
         // build the card and append to the saved searches card
         closeButton.append(closeAriaSpan);
-        bodyDiv.append(headerTag, searchButton);
+        bodyDiv.append(headerTag, paragraphTag, searchButton);
         wrapperDiv.append(closeButton, bodyDiv);
         $("#saved-searches").append(wrapperDiv);
+    });
+
+    // on delete listener to remove item from database when you click the "X"
+    database.ref().on("child_removed", function(snapshot) {
+        $("#" + snapshot.key).remove();
+    });
+
+    // onclick for clicking the x to delete the card, and to delete the database record
+    $("body").on("click", "#delete-card", function() {
+        var key = $(this).attr("data-key");
+        database.ref(key).remove();
     });
 
     var clickSearch = $("#search").on("click", function () {
