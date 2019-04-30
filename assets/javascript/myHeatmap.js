@@ -4,7 +4,7 @@ $(document).ready(function () {
     var cfg = {
         // radius should be small ONLY if scaleRadius is true (or small radius is intended)
         // if scaleRadius is false it will be the constant radius used in pixels
-        "radius": .002, // I had to make this really small. if it's 1 the whole state is red! 
+        "radius": .004, // I had to make this really small. if it's 1 the whole state is red! 
         "maxOpacity": .8,
         // scales the radius based on map zoom
         "scaleRadius": true,
@@ -20,17 +20,8 @@ $(document).ready(function () {
         valueField: 'count'
     };
 
+
     var heatmapLayer = new HeatmapOverlay(cfg); // check console.log to see that heatmapLayer is mutable!!! 
-
-
-    L.mapquest.key = 'FuQjru92zZdcmkhC0D99Fp9Ye0ZaEAGa';
-    // 'map' refers to a <div> element with the ID map
-     var makeMap = L.mapquest.map('map', {
-        center: [39.8283, -98.5795],
-        layers: [L.mapquest.tileLayer('map'), heatmapLayer],
-        zoom: 4
-    });
-
 
     // zomato code
     var zomatoKey = "c7db9a7567a1e0278cfd9829e1435aa1";
@@ -108,16 +99,16 @@ $(document).ready(function () {
                 // leaflet code
                 var lat = cityLat;
                 var long = cityLong;
-                var zoom = 14;
+                var zoom = 12;
 
-                makeMap.panTo({
-                    lat: lat,
-                    lng: long,
-                    zoom: zoom
-                }
-                );
+                L.mapquest.key = 'FuQjru92zZdcmkhC0D99Fp9Ye0ZaEAGa';
                 heatmapLayer.setData(testData);
-
+                // 'map' refers to a <div> element with the ID map
+                L.mapquest.map('map', {
+                    center: [lat, long],
+                    layers: [L.mapquest.tileLayer('map'), heatmapLayer],
+                    zoom: zoom
+                });
             });
         });
     });
