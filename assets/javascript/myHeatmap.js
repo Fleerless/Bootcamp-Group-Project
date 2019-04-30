@@ -115,7 +115,11 @@ $(document).ready(function () {
                 L.mapquest.key = 'FuQjru92zZdcmkhC0D99Fp9Ye0ZaEAGa';
                 heatmapLayer.setData(testData);
                 // 'map' refers to a <div> element with the ID map
-                L.mapquest.map.panTo(lat, long, zoom);
+                L.mapquest.map.panTo('map', {
+                    center: [lat, long],
+                    layers: [L.mapquest.tileLayer('map'), heatmapLayer],
+                    zoom: zoom
+                });
             });
         });
     });
