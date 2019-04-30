@@ -38,15 +38,19 @@ $(document).ready(function(){
 
   var clickSearch = $("#search").on("click", function(){
   var citySearch = $("#location-input").val().trim();
+  $("#map").empty();
+  $("#map").removeClass();
   $.ajax({
     method: "GET",
     url: "https://developers.zomato.com/api/v2.1/locations?query="+citySearch,
     headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
   }).then(function(response){
-    console.log(response);
-    cityLat = response.location_suggestions[0].latitude;
+0    cityLat = response.location_suggestions[0].latitude;
     cityLong = response.location_suggestions[0].longitude;
     cityId = (response.location_suggestions[0].city_id).toString();
+    console.log("response: ", response);
+    console.log("city id: ", cityId);
+
   }).then(function(){
 
   var ajax1 = $.ajax({
@@ -74,7 +78,6 @@ $(document).ready(function(){
           url: "https://developers.zomato.com/api/v2.1/search?entity_id="+cityId+"&entity_type=city&q=restaurant&start=80",
           headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
       });
-      
 
   $.when( ajax1, ajax2, ajax3, ajax4, ajax5).done(function (r1, r2, r3, r4, r5) {
     
