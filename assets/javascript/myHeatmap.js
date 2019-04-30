@@ -71,9 +71,10 @@ $(document).ready(function () {
         closeAriaSpan.html("&times;");
         var searchButton = $("<button class='btn btn-primary'>");
         searchButton.attr({
-            "id": "saved-search",
+            "id": "search",
             "data-city": citySearch,
-            "data-category": categorySearch
+            "data-category": categorySearch,
+            "data-saved": "true"
         });
         searchButton.text("Search");
         // build the card and append to the saved searches card
@@ -94,7 +95,7 @@ $(document).ready(function () {
         database.ref(key).remove();
     });
 
-    var clickSearch = $("#search").on("click", function () {
+    $("body").on("click", "#search", function () {
         var citySearch = $("#location-input").val().trim();
         // ========================================== Andy's code to push to firebase =======
         var categorySearch = $("#category-input").val();
@@ -103,7 +104,11 @@ $(document).ready(function () {
             category: categorySearch
         }; 
 
-        database.ref().push(searchObject);
+        console.log($(this).attr("data-saved"));
+
+        if ($(this).attr("data-saved") === "false") {
+            database.ref().push(searchObject);
+        }
         // =========================================================================================
        
         $.ajax({
