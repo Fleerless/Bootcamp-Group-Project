@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    // Initialize #map with a map of the continental 48 States
+    // Initialize Map with overview of 48 States
 
     L.mapquest.key = 'FuQjru92zZdcmkhC0D99Fp9Ye0ZaEAGa';
     // 'map' refers to a <div> element with the ID map
@@ -9,6 +9,65 @@ $(document).ready(function () {
         layers: [L.mapquest.tileLayer('map')],
         zoom: 4
     });
+
+    // firebase init ==========================
+    var config = {
+        apiKey: "AIzaSyAicdqjxs4oR2uVS3q5niz7bJFoGfq5ixk",
+        authDomain: "bootcamp-group-project-jamg.firebaseapp.com",
+        databaseURL: "https://bootcamp-group-project-jamg.firebaseio.com",
+        projectId: "bootcamp-group-project-jamg",
+        storageBucket: "bootcamp-group-project-jamg.appspot.com",
+        messagingSenderId: "229343148076"
+    };
+    firebase.initializeApp(config);
+
+    var database = firebase.database();
+
+     // this is the group of listeners for the firebase database to update saved searches
+    database.ref().on("child_added", function(snapshot) {
+        var key = snapshot.key; // this is the unique node id for each record
+        var citySearch = snapshot.val().city;
+        var categorySearch = snapshot.val().category;
+
+        // create a card with button in the saved search area
+        var wrapperDiv = $("<div class='card text-center' style='width: 18rem;'>");
+        wrapperDiv.attr("id", key);
+        var bodyDiv = $("<div class='card text-center' style='width: 18rem'>");
+        var headerTag = $("<h5 class='card-title'>");
+        headerTag.attr("id, title" + key);
+        headerTag.text(citySearch);
+        var paragraphTag = $("<p class='card-text'>");
+        paragraphTag.text(categorySearch);
+        var closeButton = $("<button type='button' class='close align-self-end mr-1' aria-label='Close'>");
+        closeButton.attr({"data-key": key, "id": "delete-card"}); // will be used to delete this search from the database
+        var closeAriaSpan = $("<span aria-hidden='true'>");
+        closeAriaSpan.html("&times;");
+        var searchButton = $("<button class='btn btn-primary'>");
+        searchButton.attr({
+            "id": "search",
+            "data-city": citySearch,
+            "data-category": categorySearch,
+            "data-saved": "true"
+        });
+        searchButton.text("Search");
+        // build the card and append to the saved searches card
+        closeButton.append(closeAriaSpan);
+        bodyDiv.append(headerTag, paragraphTag, searchButton);
+        wrapperDiv.append(closeButton, bodyDiv);
+        $("#saved-searches").append(wrapperDiv);
+    });
+
+    // on delete listener to remove item from database when you click the "X"
+    database.ref().on("child_removed", function(snapshot) {
+        $("#" + snapshot.key).remove();
+    });
+
+    // onclick for clicking the x to delete the card, and to delete the database record
+    $("body").on("click", "#delete-card", function() {
+        var key = $(this).attr("data-key");
+        database.ref(key).remove();
+    });
+
 
     // heatmap code 
     var cfg = {
@@ -46,10 +105,16 @@ $(document).ready(function () {
     var cityLong;
     var cityId;
 
-    var clickSearch = $("#search").on("click", function () {
+    var clickSearch = $("body").on("click", "#search", function () {
         var citySearch = $("#location-input").val().trim();
-        $("#map").empty();
-        $("#map").removeClass();
+        var category = $("#category-input").val().trim();
+
+        // add to the database
+        database.ref().push({
+            city: citySearch,
+            category: category
+        });
+       
         $.ajax({
             method: "GET",
             url: "https://developers.zomato.com/api/v2.1/locations?query=" + citySearch,
@@ -65,32 +130,32 @@ $(document).ready(function () {
 
             var ajax1 = $.ajax({
                 method: "GET",
-                url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "entity_type=city&q=restaurant&start=0",
+                url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q="+category+"&start=0",
                 headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
             }),
                 ajax2 = $.ajax({
                     method: "GET",
-                    url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q=restaurant&start=20",
+                    url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q="+category+"&start=20",
                     headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
                 }),
                 ajax3 = $.ajax({
                     method: "GET",
-                    url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q=restaurant&start=40",
+                    url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q="+category+"&start=40",
                     headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
                 }),
                 ajax4 = $.ajax({
                     method: "GET",
-                    url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q=restaurant&start=60",
+                    url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q="+category+"&start=60",
                     headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
                 }),
                 ajax5 = $.ajax({
                     method: "GET",
-                    url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q=restaurant&start=80",
+                    url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q="+category+"&start=80",
                     headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
                 });
 
-            $.when(ajax1, ajax2, ajax3, ajax4, ajax5).done(function (r1, r2, r3, r4, r5) {
 
+            $.when(ajax1, ajax2, ajax3, ajax4, ajax5).done(function (r1, r2, r3, r4, r5) {
                 console.log("r1: ", r1);
                 // r1 is the response, r1[0] is where the data is in a .when() call. 
                 // check the log for the response 
@@ -115,7 +180,7 @@ $(document).ready(function () {
                 L.mapquest.key = 'FuQjru92zZdcmkhC0D99Fp9Ye0ZaEAGa';
                 heatmapLayer.setData(testData);
                 // 'map' refers to a <div> element with the ID map
-                L.mapquest.map.panTo('map', {
+                L.mapquest.map('map', {
                     center: [lat, long],
                     layers: [L.mapquest.tileLayer('map'), heatmapLayer],
                     zoom: zoom

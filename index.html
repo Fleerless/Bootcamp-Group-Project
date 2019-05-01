@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <title>What's Hot?</title>
+    <!-- firebase -->
+    <script src="https://www.gstatic.com/firebasejs/5.10.1/firebase.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
     integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
     crossorigin="" />
@@ -22,8 +24,8 @@
 <script src="assets/javascript/myHeatmap.js"></script>
 <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest-maps.css" />
 <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest-maps.js"></script>
-    <!-- CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- CSS this needs to get changed to the current bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
 
@@ -38,6 +40,13 @@
 
 
     <div class="row">
+        <div class="card col-sm-4">
+            <div class="card-header">
+                Saved Searches
+            </div>
+            <div class="card-body" id="saved-searches">
+            </div>
+        </div>
         <div class="col-sm-4">
             <div class="panel panel-warning">
                 <div class="panel-heading">
@@ -61,7 +70,7 @@
                                 <option>Pubs & Bars</option>
                                 <option>Clubs & Lounges</option>
                             </select>
-                            <button type="button" class="btn btn-primary" id="search">Search</button>
+                            <button type="button" class="btn btn-primary" id="search" data-saved="false">Search</button>
                         </div>
                     </form>
 
@@ -86,7 +95,6 @@
 
     </div>
     </form>
-
 </body>
 
 </html>
