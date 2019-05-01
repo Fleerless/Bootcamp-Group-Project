@@ -98,6 +98,12 @@ $(document).ready(function () {
     var clickSearch = $("body").on("click", "#search", function () {
         var citySearch = $("#location-input").val().trim();
         var category = $("#category-input").val().trim();
+
+        // add to the database
+        database.ref().push({
+            city: citySearch,
+            category: category
+        });
        
         $.ajax({
             method: "GET",
