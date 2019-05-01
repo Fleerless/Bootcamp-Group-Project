@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>What's Hot?</title>
+    <!-- firebase -->
+    <script src="https://www.gstatic.com/firebasejs/5.10.1/firebase.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+    integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+    crossorigin="" />
+<!-- Make sure you put this AFTER Leaflet's CSS -->
+<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+    integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+    crossorigin=""></script>
+<!-- mapquest JS goes here -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="assets/javascript/heatmap.js-2.0.5/build/heatmap.js"></script>
+<script src="assets/javascript/leaflet-heatmap.js"></script>
+<!-- <script src="assets/javascript/mikesCode.js"></script> -->
+<script src="assets/javascript/myHeatmap.js"></script>
+<link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest-maps.css" />
+<script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest-maps.js"></script>
+    <!-- CSS this needs to get changed to the current bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+
+</head>
+
+<body>
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">What's Hot?</h1>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="card col-sm-4">
+            <div class="card-header">
+                Saved Searches
+            </div>
+            <div class="card-body" id="saved-searches">
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        Search A City
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <form class="search">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Search (City, State)</label>
+                            <input type="email" class="form-control" id="location-input" aria-describedby="emailHelp"
+                                placeholder="ex. Denver, CO">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect1">Category</label>
+                            <select class="form-control" id="category-input">
+                                <option>Breakfast</option>
+                                <option>Lunch</option>
+                                <option>Dinner</option>
+                                <option>Pubs & Bars</option>
+                                <option>Clubs & Lounges</option>
+                            </select>
+                            <button type="button" class="btn btn-primary" id="search" data-saved="false">Search</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        Map
+                    </h3>
+                </div>
+                <div id="map" style="height:500px">
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    </div>
+    </form>
+</body>
+
+</html>
