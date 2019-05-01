@@ -1,5 +1,64 @@
 $(document).ready(function () {
 
+    // firebase init ==========================
+    var config = {
+        apiKey: "AIzaSyAicdqjxs4oR2uVS3q5niz7bJFoGfq5ixk",
+        authDomain: "bootcamp-group-project-jamg.firebaseapp.com",
+        databaseURL: "https://bootcamp-group-project-jamg.firebaseio.com",
+        projectId: "bootcamp-group-project-jamg",
+        storageBucket: "bootcamp-group-project-jamg.appspot.com",
+        messagingSenderId: "229343148076"
+    };
+    firebase.initializeApp(config);
+
+    var database = firebase.database();
+
+     // this is the group of listeners for the firebase database to update saved searches
+    database.ref().on("child_added", function(snapshot) {
+        var key = snapshot.key; // this is the unique node id for each record
+        var citySearch = snapshot.val().city;
+        var categorySearch = snapshot.val().category;
+
+        // create a card with button in the saved search area
+        var wrapperDiv = $("<div class='card text-center' style='width: 18rem;'>");
+        wrapperDiv.attr("id", key);
+        var bodyDiv = $("<div class='card text-center' style='width: 18rem'>");
+        var headerTag = $("<h5 class='card-title'>");
+        headerTag.attr("id, title" + key);
+        headerTag.text(citySearch);
+        var paragraphTag = $("<p class='card-text'>");
+        paragraphTag.text(categorySearch);
+        var closeButton = $("<button type='button' class='close align-self-end mr-1' aria-label='Close'>");
+        closeButton.attr({"data-key": key, "id": "delete-card"}); // will be used to delete this search from the database
+        var closeAriaSpan = $("<span aria-hidden='true'>");
+        closeAriaSpan.html("&times;");
+        var searchButton = $("<button class='btn btn-primary'>");
+        searchButton.attr({
+            "id": "search",
+            "data-city": citySearch,
+            "data-category": categorySearch,
+            "data-saved": "true"
+        });
+        searchButton.text("Search");
+        // build the card and append to the saved searches card
+        closeButton.append(closeAriaSpan);
+        bodyDiv.append(headerTag, paragraphTag, searchButton);
+        wrapperDiv.append(closeButton, bodyDiv);
+        $("#saved-searches").append(wrapperDiv);
+    });
+
+    // on delete listener to remove item from database when you click the "X"
+    database.ref().on("child_removed", function(snapshot) {
+        $("#" + snapshot.key).remove();
+    });
+
+    // onclick for clicking the x to delete the card, and to delete the database record
+    $("body").on("click", "#delete-card", function() {
+        var key = $(this).attr("data-key");
+        database.ref(key).remove();
+    });
+
+
     // heatmap code 
     var cfg = {
         // radius should be small ONLY if scaleRadius is true (or small radius is intended)
@@ -36,10 +95,10 @@ $(document).ready(function () {
     var cityLong;
     var cityId;
 
-    var clickSearch = $("#search").on("click", function () {
+    var clickSearch = $("body").on("click", "#search", function () {
         var citySearch = $("#location-input").val().trim();
         var category = $("#category-input").val().trim();
-
+       
         $.ajax({
             method: "GET",
             url: "https://developers.zomato.com/api/v2.1/locations?query=" + citySearch,
