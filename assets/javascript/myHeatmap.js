@@ -13,44 +13,7 @@ $(document).ready(function () {
 
     var database = firebase.database();
 
-
-    // heatmap code 
-    var cfg = {
-        // radius should be small ONLY if scaleRadius is true (or small radius is intended)
-        // if scaleRadius is false it will be the constant radius used in pixels
-        "radius": .004, // I had to make this really small. if it's 1 the whole state is red! 
-        "maxOpacity": .8,
-        // scales the radius based on map zoom
-        "scaleRadius": true,
-        // if set to false the heatmap uses the global maximum for colorization
-        // if activated: uses the data maximum within the current map boundaries 
-        //   (there will always be a red spot with useLocalExtremas true)
-        "useLocalExtrema": true,
-        // which field name in your data represents the latitude - default "lat"
-        latField: 'latitude',
-        // which field name in your data represents the longitude - default "lng"
-        lngField: 'longitude',
-        // which field name in your data represents the data value - default "value"
-        valueField: 'count'
-    };
-
-
-    var heatmapLayer = new HeatmapOverlay(cfg); // check console.log to see that heatmapLayer is mutable!!! 
-
-    // zomato code
-    var zomatoKey = "c7db9a7567a1e0278cfd9829e1435aa1";
-    var testData = {
-        max: 100,
-        data: []
-    };
-
-    // this seems way more complex, but it demonstrates the use of the jQuery .when() method
-    // which can be used to call a function after a response is returned, and get it out of the $.ajax() call
-    var cityLat;
-    var cityLong;
-    var cityId;
-
-    // this is the group of listeners for the firebase database to update saved searches
+     // this is the group of listeners for the firebase database to update saved searches
     database.ref().on("child_added", function(snapshot) {
         var key = snapshot.key; // this is the unique node id for each record
         var citySearch = snapshot.val().city;
@@ -95,21 +58,46 @@ $(document).ready(function () {
         database.ref(key).remove();
     });
 
-    $("body").on("click", "#search", function () {
+
+    // heatmap code 
+    var cfg = {
+        // radius should be small ONLY if scaleRadius is true (or small radius is intended)
+        // if scaleRadius is false it will be the constant radius used in pixels
+        "radius": .004, // I had to make this really small. if it's 1 the whole state is red! 
+        "maxOpacity": .8,
+        // scales the radius based on map zoom
+        "scaleRadius": true,
+        // if set to false the heatmap uses the global maximum for colorization
+        // if activated: uses the data maximum within the current map boundaries 
+        //   (there will always be a red spot with useLocalExtremas true)
+        "useLocalExtrema": true,
+        // which field name in your data represents the latitude - default "lat"
+        latField: 'latitude',
+        // which field name in your data represents the longitude - default "lng"
+        lngField: 'longitude',
+        // which field name in your data represents the data value - default "value"
+        valueField: 'count'
+    };
+
+
+    var heatmapLayer = new HeatmapOverlay(cfg); // check console.log to see that heatmapLayer is mutable!!! 
+
+    // zomato code
+    var zomatoKey = "c7db9a7567a1e0278cfd9829e1435aa1";
+    var testData = {
+        max: 100,
+        data: []
+    };
+
+    // this seems way more complex, but it demonstrates the use of the jQuery .when() method
+    // which can be used to call a function after a response is returned, and get it out of the $.ajax() call
+    var cityLat;
+    var cityLong;
+    var cityId;
+
+    var clickSearch = $("body").on("click", "#search", function () {
         var citySearch = $("#location-input").val().trim();
-        // ========================================== Andy's code to push to firebase =======
-        var categorySearch = $("#category-input").val();
-        var searchObject = {
-            city: citySearch,
-            category: categorySearch
-        }; 
-
-        console.log($(this).attr("data-saved"));
-
-        if ($(this).attr("data-saved") === "false") {
-            database.ref().push(searchObject);
-        }
-        // =========================================================================================
+        var category = $("#category-input").val().trim();
        
         $.ajax({
             method: "GET",
@@ -124,33 +112,33 @@ $(document).ready(function () {
 
             var ajax1 = $.ajax({
                 method: "GET",
-                url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "entity_type=city&q=restaurant&start=0",
+                url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q="+category+"&start=0",
                 headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
             }),
                 ajax2 = $.ajax({
                     method: "GET",
-                    url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q=restaurant&start=20",
+                    url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q="+category+"&start=20",
                     headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
                 }),
                 ajax3 = $.ajax({
                     method: "GET",
-                    url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q=restaurant&start=40",
+                    url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q="+category+"&start=40",
                     headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
                 }),
                 ajax4 = $.ajax({
                     method: "GET",
-                    url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q=restaurant&start=60",
+                    url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q="+category+"&start=60",
                     headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
                 }),
                 ajax5 = $.ajax({
                     method: "GET",
-                    url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q=restaurant&start=80",
+                    url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q="+category+"&start=80",
                     headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
                 });
 
 
             $.when(ajax1, ajax2, ajax3, ajax4, ajax5).done(function (r1, r2, r3, r4, r5) {
-
+                console.log("response: ", ajax1)
                 console.log("r1: ", r1);
                 // r1 is the response, r1[0] is where the data is in a .when() call. 
                 // check the log for the response 
