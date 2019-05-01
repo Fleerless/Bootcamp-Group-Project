@@ -1,5 +1,15 @@
 $(document).ready(function () {
 
+    // Initialize Map with overview of 48 States
+
+    L.mapquest.key = 'FuQjru92zZdcmkhC0D99Fp9Ye0ZaEAGa';
+    // 'map' refers to a <div> element with the ID map
+    L.mapquest.map('map', {
+        center: [39.8283, -98.5797],
+        layers: [L.mapquest.tileLayer('map')],
+        zoom: 4
+    });
+
     // firebase init ==========================
     var config = {
         apiKey: "AIzaSyAicdqjxs4oR2uVS3q5niz7bJFoGfq5ixk",
@@ -110,10 +120,12 @@ $(document).ready(function () {
             url: "https://developers.zomato.com/api/v2.1/locations?query=" + citySearch,
             headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
         }).then(function (response) {
-            console.log(response);
             cityLat = response.location_suggestions[0].latitude;
             cityLong = response.location_suggestions[0].longitude;
             cityId = (response.location_suggestions[0].city_id).toString();
+            console.log("response: ", response);
+            console.log("city id: ", cityId);
+
         }).then(function () {
 
             var ajax1 = $.ajax({
@@ -144,7 +156,6 @@ $(document).ready(function () {
 
 
             $.when(ajax1, ajax2, ajax3, ajax4, ajax5).done(function (r1, r2, r3, r4, r5) {
-                console.log("response: ", ajax1)
                 console.log("r1: ", r1);
                 // r1 is the response, r1[0] is where the data is in a .when() call. 
                 // check the log for the response 
