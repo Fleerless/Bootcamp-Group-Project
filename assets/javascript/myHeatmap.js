@@ -2,13 +2,13 @@ $(document).ready(function () {
 
     // Initialize Map with overview of 48 States
 
-    L.mapquest.key = 'FuQjru92zZdcmkhC0D99Fp9Ye0ZaEAGa';
-    // 'map' refers to a <div> element with the ID map
-    L.mapquest.map('map', {
-        center: [39.8283, -98.5797],
-        layers: [L.mapquest.tileLayer('map')],
-        zoom: 4
-    });
+    // L.mapquest.key = 'FuQjru92zZdcmkhC0D99Fp9Ye0ZaEAGa';
+    // // 'map' refers to a <div> element with the ID map
+    // L.mapquest.map('map', {
+    //     center: [39.8283, -98.5797],
+    //     layers: [L.mapquest.tileLayer('map')],
+    //     zoom: 4
+    // });
 
     // firebase init ==========================
     var config = {
@@ -108,6 +108,11 @@ $(document).ready(function () {
     var clickSearch = $("body").on("click", "#search", function () {
         var citySearch = $("#location-input").val().trim();
         var category = $("#category-input").val().trim();
+        map.remove();
+        var newMap = $("<div>");
+        newMap.attr("id", "map");
+        newMap.attr("style", "height:500px");
+        $("#add-map").append(newMap);
 
         // add to the database
         database.ref().push({
