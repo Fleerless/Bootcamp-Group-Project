@@ -1,7 +1,5 @@
 $(document).ready(function () {
 
-    var isLocations;
-
     // firebase init ==========================
     var config = {
         apiKey: "AIzaSyAicdqjxs4oR2uVS3q5niz7bJFoGfq5ixk",
@@ -99,33 +97,25 @@ $(document).ready(function () {
 
     // onclick for the initial search button which DOES update the database
     $("body").on("click", "#search", function () {
-        $("#search-warning").css("display", "none");
+        var isChecked = document.getElementById("search-save-checkbox").checked;
         testData.data.length = 0; // delete the lat/long data
+        var thisElement = $(this).attr("id");
         var citySearch = $("#location-input").val().trim();
         var category = $("#category-input").val().trim();
-        clickSearch(citySearch, category);
-        if (isLocations) {
-            // add to the database
-            database.ref().push({
-                city: citySearch,
-                category: category
-            });
-            console.log(testData);
-        } else {
-            $("#search-warning").css("display", "block");
-        }
+        clickSearch(citySearch, category, thisElement);
     });
 
     // onclick for the saved search button which DOES NOT update the database
     $("body").on("click", "#saved-search", function () {
         testData.data.length = 0; // delete the lat/long data
+        var thisElement = $(this).attr("id");
         var citySearch = $(this).attr("data-city");
         var category = $(this).attr("data-category");
-        clickSearch(citySearch, category);
+        clickSearch(citySearch, category, thisElement);
         console.log(testData);
     });
 
-    var clickSearch = function (citySearch, category) {
+    var clickSearch = function (citySearch, category, thisElement) {
         map.remove();
         var newMap = $("<div>");
         newMap.attr("id", "map");
@@ -137,9 +127,23 @@ $(document).ready(function () {
             url: "https://developers.zomato.com/api/v2.1/locations?query=" + citySearch,
             headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
         }).then(function (response) {
-            if (response.location_suggestions.length === 0) {
-                console.log()
-                isLocations = false;
+            console.log(response);
+            var locationNum = response.location_suggestions.length;
+            if (thisElement === "search") { // check to see if the clicked on element is the #search button
+                if (response.location_suggestions.length > 0) {
+                    $("small").css("display", "none");
+                } else {
+                    $("small").css("display", "block");
+                }
+            }
+            if (thisElement === "search") { // check to see if the save this search checkbox is checked
+                if (document.getElementById("search-save-checkbox").checked) {
+                    // add to the database
+                    database.ref().push({
+                        city: response.location_suggestions[0].title,
+                        category: category
+                    });
+                }
             }
             cityLat = response.location_suggestions[0].latitude;
             cityLong = response.location_suggestions[0].longitude;
