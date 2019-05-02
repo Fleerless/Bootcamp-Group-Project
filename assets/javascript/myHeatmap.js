@@ -130,14 +130,14 @@ $(document).ready(function () {
             console.log(response);
             var locationNum = response.location_suggestions.length;
             if (thisElement === "search") { // check to see if the clicked on element is the #search button
-                if (response.location_suggestions.length > 0) {
+                if (locationNum > 0) {
                     $("small").css("display", "none");
                 } else {
                     $("small").css("display", "block");
                 }
             }
             if (thisElement === "search") { // check to see if the save this search checkbox is checked
-                if (document.getElementById("search-save-checkbox").checked) {
+                if (document.getElementById("search-save-checkbox").checked && locationNum > 0) {
                     // add to the database
                     database.ref().push({
                         city: response.location_suggestions[0].title,
