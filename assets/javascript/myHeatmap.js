@@ -107,6 +107,7 @@ $(document).ready(function () {
 
     // onclick for the initial search button which DOES update the database
      $("body").on("click", "#search", function() {
+        testData.data.length = 0; // delete the lat/long data
         var citySearch = $("#location-input").val().trim();
         var category = $("#category-input").val().trim();
         clickSearch(citySearch, category);
@@ -116,13 +117,16 @@ $(document).ready(function () {
             city: citySearch,
             category: category
         });
+        console.log(testData);
      });
 
      // onclick for the saved search button which DOES NOT update the database
      $("body").on("click", "#saved-search", function() {
+        testData.data.length = 0; // delete the lat/long data
         var citySearch = $(this).attr("data-city");
         var category = $(this).attr("data-category");
         clickSearch(citySearch, category);
+        console.log(testData);
      });
     
      var clickSearch = function (citySearch, category) {
