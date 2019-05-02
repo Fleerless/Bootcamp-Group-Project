@@ -44,7 +44,7 @@ $(document).ready(function () {
         closeAriaSpan.html("&times;");
         var searchButton = $("<button class='btn btn-primary'>");
         searchButton.attr({
-            "id": "search",
+            "id": "saved-search",
             "data-city": citySearch,
             "data-category": categorySearch,
             "data-saved": "true"
@@ -105,20 +105,36 @@ $(document).ready(function () {
     var cityLong;
     var cityId;
 
-    var clickSearch = $("body").on("click", "#search", function () {
+    // onclick for the initial search button which DOES update the database
+     $("body").on("click", "#search", function() {
+        testData.data.length = 0; // delete the lat/long data
         var citySearch = $("#location-input").val().trim();
         var category = $("#category-input").val().trim();
-        map.remove();
-        var newMap = $("<div>");
-        newMap.attr("id", "map");
-        newMap.attr("style", "height:500px");
-        $("#add-map").append(newMap);
+        clickSearch(citySearch, category);
 
         // add to the database
         database.ref().push({
             city: citySearch,
             category: category
         });
+        console.log(testData);
+     });
+
+     // onclick for the saved search button which DOES NOT update the database
+     $("body").on("click", "#saved-search", function() {
+        testData.data.length = 0; // delete the lat/long data
+        var citySearch = $(this).attr("data-city");
+        var category = $(this).attr("data-category");
+        clickSearch(citySearch, category);
+        console.log(testData);
+     });
+    
+     var clickSearch = function (citySearch, category) {
+        map.remove();
+        var newMap = $("<div>");
+        newMap.attr("id", "map");
+        newMap.attr("style", "height:500px");
+        $("#add-map").append(newMap);
        
         $.ajax({
             method: "GET",
@@ -192,6 +208,6 @@ $(document).ready(function () {
                 });
             });
         });
-    });
+    }
 });
 
