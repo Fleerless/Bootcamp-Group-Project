@@ -1,0 +1,79 @@
+body {
+    background-image: url('');
+    font-family: 'Helvetica, Arial, sans-serif. Behold!';
+}
+.title{
+    background-image: url("")
+
+   
+}
+
+.jumbotron jumbotron-fluid{
+
+    background-color: #2f3233;
+    color: white;
+    margin-top: 50px;
+    padding: 5px;
+    padding-bottom: 15px;
+    text-align: left;
+    font-size: 18px;
+    opacity: 0.8;
+}
+
+
+#map {
+    height: 400px;
+    width: 100%;
+    margin-top: 25px;
+}
+
+
+
+.search {
+    background-color: rgb(74, 163, 236);
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 75%;
+}
+
+.penal- body{
+    color: #fff;
+    background-color: #f0ad4e;
+    border-color: #eea236;
+    width: 22%;
+}
+
+.category-input{
+    filter: alpha(opacity=50);
+    opacity: -0.5;
+}
+
+.btn {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    width: 22%;
+}
+
+button:hover {
+    opacity: 0.8;
+}

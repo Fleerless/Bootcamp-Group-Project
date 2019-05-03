@@ -63,6 +63,7 @@
                             <label for="exampleInputEmail1">Search (City, State)</label>
                             <input type="email" class="form-control" id="location-input" aria-describedby="emailHelp"
                                 placeholder="ex. Denver, CO">
+                                <small id="search-warning" class="form-text text-danger" style="display: none">Search Failed</small>
                         </div>
                         <div class="form-group">
                             <label for="exampleFormControlSelect1">Category</label>
@@ -73,8 +74,12 @@
                                 <option>Pubs & Bars</option>
                                 <option>Clubs & Lounges</option>
                             </select>
-                            <button type="button" class="btn btn-primary" id="search" data-saved="false">Search</button>
                         </div>
+                        <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" id="search-save-checkbox">
+                            <label class="form-check-label" for="exampleCheck1">Save This Search</label>
+                        </div>
+                        <button type="button" class="btn btn-primary" id="search" data-saved="false">Search</button>
                     </form>
 
                 </div>

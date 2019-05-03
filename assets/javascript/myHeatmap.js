@@ -1,15 +1,5 @@
 $(document).ready(function () {
 
-    // Initialize Map with overview of 48 States
-
-    // L.mapquest.key = 'FuQjru92zZdcmkhC0D99Fp9Ye0ZaEAGa';
-    // // 'map' refers to a <div> element with the ID map
-    // L.mapquest.map('map', {
-    //     center: [39.8283, -98.5797],
-    //     layers: [L.mapquest.tileLayer('map')],
-    //     zoom: 4
-    // });
-
     // firebase init ==========================
     var config = {
         apiKey: "AIzaSyAicdqjxs4oR2uVS3q5niz7bJFoGfq5ixk",
@@ -23,8 +13,8 @@ $(document).ready(function () {
 
     var database = firebase.database();
 
-     // this is the group of listeners for the firebase database to update saved searches
-    database.ref().on("child_added", function(snapshot) {
+    // this is the group of listeners for the firebase database to update saved searches
+    database.ref().on("child_added", function (snapshot) {
         var key = snapshot.key; // this is the unique node id for each record
         var citySearch = snapshot.val().city;
         var categorySearch = snapshot.val().category;
@@ -39,7 +29,7 @@ $(document).ready(function () {
         var paragraphTag = $("<p class='card-text'>");
         paragraphTag.text(categorySearch);
         var closeButton = $("<button type='button' class='close align-self-end mr-1' aria-label='Close'>");
-        closeButton.attr({"data-key": key, "id": "delete-card"}); // will be used to delete this search from the database
+        closeButton.attr({ "data-key": key, "id": "delete-card" }); // will be used to delete this search from the database
         var closeAriaSpan = $("<span aria-hidden='true'>");
         closeAriaSpan.html("&times;");
         var searchButton = $("<button class='btn btn-primary'>");
@@ -59,12 +49,12 @@ $(document).ready(function () {
     });
 
     // on delete listener to remove item from database when you click the "X"
-    database.ref().on("child_removed", function(snapshot) {
+    database.ref().on("child_removed", function (snapshot) {
         $("#" + snapshot.key).remove();
     });
 
     // onclick for clicking the x to delete the card, and to delete the database record
-    $("body").on("click", "#delete-card", function() {
+    $("body").on("click", "#delete-card", function () {
         var key = $(this).attr("data-key");
         database.ref(key).remove();
     });
@@ -112,8 +102,10 @@ $(document).ready(function () {
     var cityId;
 
     // onclick for the initial search button which DOES update the database
-     $("body").on("click", "#search", function() {
+    $("body").on("click", "#search", function () {
+        var isChecked = document.getElementById("search-save-checkbox").checked;
         testData.data.length = 0; // delete the lat/long data
+        var thisElement = $(this).attr("id");
         var citySearch = $("#location-input").val().trim();
         var category = $("#category-input").val().trim();
         clickSearch(citySearch, category);
@@ -127,12 +119,13 @@ $(document).ready(function () {
         console.log(locationData);
      });
 
-     // onclick for the saved search button which DOES NOT update the database
-     $("body").on("click", "#saved-search", function() {
+    // onclick for the saved search button which DOES NOT update the database
+    $("body").on("click", "#saved-search", function () {
         testData.data.length = 0; // delete the lat/long data
+        var thisElement = $(this).attr("id");
         var citySearch = $(this).attr("data-city");
         var category = $(this).attr("data-category");
-        clickSearch(citySearch, category);
+        clickSearch(citySearch, category, thisElement);
         console.log(testData);
         console.log(locationData);
      });
@@ -144,12 +137,30 @@ $(document).ready(function () {
         newMap.attr("id", "map");
         newMap.attr("style", "height:500px");
         $("#add-map").append(newMap);
-       
+
         $.ajax({
             method: "GET",
             url: "https://developers.zomato.com/api/v2.1/locations?query=" + citySearch,
             headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
         }).then(function (response) {
+            console.log(response);
+            var locationNum = response.location_suggestions.length;
+            if (thisElement === "search") { // check to see if the clicked on element is the #search button
+                if (response.location_suggestions.length > 0) {
+                    $("small").css("display", "none");
+                } else {
+                    $("small").css("display", "block");
+                }
+            }
+            if (thisElement === "search") { // check to see if the save this search checkbox is checked
+                if (document.getElementById("search-save-checkbox").checked) {
+                    // add to the database
+                    database.ref().push({
+                        city: response.location_suggestions[0].title,
+                        category: category
+                    });
+                }
+            }
             cityLat = response.location_suggestions[0].latitude;
             cityLong = response.location_suggestions[0].longitude;
             cityId = (response.location_suggestions[0].city_id).toString();
@@ -160,27 +171,27 @@ $(document).ready(function () {
 
             var ajax1 = $.ajax({
                 method: "GET",
-                url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q="+category+"&start=0",
+                url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q=" + category + "&start=0",
                 headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
             }),
                 ajax2 = $.ajax({
                     method: "GET",
-                    url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q="+category+"&start=20",
+                    url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q=" + category + "&start=20",
                     headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
                 }),
                 ajax3 = $.ajax({
                     method: "GET",
-                    url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q="+category+"&start=40",
+                    url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q=" + category + "&start=40",
                     headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
                 }),
                 ajax4 = $.ajax({
                     method: "GET",
-                    url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q="+category+"&start=60",
+                    url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q=" + category + "&start=60",
                     headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
                 }),
                 ajax5 = $.ajax({
                     method: "GET",
-                    url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q="+category+"&start=80",
+                    url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q=" + category + "&start=80",
                     headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
                 });
 
