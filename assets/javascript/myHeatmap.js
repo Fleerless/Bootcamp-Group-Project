@@ -45,6 +45,7 @@ $(document).ready(function () {
         bodyDiv.append(headerTag, paragraphTag, searchButton);
         wrapperDiv.append(closeButton, bodyDiv);
         $("#saved-searches").append(wrapperDiv);
+
     });
 
     // on delete listener to remove item from database when you click the "X"
@@ -88,6 +89,11 @@ $(document).ready(function () {
         max: 100,
         data: []
     };
+    var locationData = {
+        max: 100,
+        data: []
+    };
+
 
     // this seems way more complex, but it demonstrates the use of the jQuery .when() method
     // which can be used to call a function after a response is returned, and get it out of the $.ajax() call
@@ -102,8 +108,16 @@ $(document).ready(function () {
         var thisElement = $(this).attr("id");
         var citySearch = $("#location-input").val().trim();
         var category = $("#category-input").val().trim();
-        clickSearch(citySearch, category, thisElement);
-    });
+        clickSearch(citySearch, category);
+
+        // add to the database
+        database.ref().push({
+            city: citySearch,
+            category: category
+        });
+        console.log(testData);
+        console.log(locationData);
+     });
 
     // onclick for the saved search button which DOES NOT update the database
     $("body").on("click", "#saved-search", function () {
@@ -113,9 +127,11 @@ $(document).ready(function () {
         var category = $(this).attr("data-category");
         clickSearch(citySearch, category, thisElement);
         console.log(testData);
-    });
-
-    var clickSearch = function (citySearch, category, thisElement) {
+        console.log(locationData);
+     });
+    
+     var clickSearch = function (citySearch, category) {
+        $("#details-div").empty();
         map.remove();
         var newMap = $("<div>");
         newMap.attr("id", "map");
@@ -185,6 +201,7 @@ $(document).ready(function () {
                 // r1 is the response, r1[0] is where the data is in a .when() call. 
                 // check the log for the response 
                 var responseArray = [];
+                //console.log(responseArray);
                 responseArray.push(r1[0], r2[0], r3[0], r4[0], r5[0]);
                 responseArray.forEach(function (response) {
                     for (i = 0; i < response.restaurants.length; i++) {
@@ -194,9 +211,28 @@ $(document).ready(function () {
                         var long = parseFloat(longString);
                         var latLong = { "latitude": lat, "longitude": long, "count": 1 };
                         testData.data.push(latLong);
+                     
                     }
+                    
                 });
+                var detailArray = [];
+                console.log(detailArray);
+                detailArray.push(r1[0]);
 
+              detailArray.forEach(function (response) {
+                    for (i = 0; i < response.restaurants.length; i++) {
+                        var name = response.restaurants[i].restaurant.name;
+                        var address = response.restaurants[i].restaurant.location.address;
+                        var nameAddress = { "name": name, "address": address, "count": 1 };
+                        locationData.data.push(nameAddress);
+                       // $("#details-div").empty();
+                        $("#details-div" ).append(name, address);
+                    
+                      
+                    }
+                   
+                });
+                      
                 // leaflet code
                 var lat = cityLat;
                 var long = cityLong;
