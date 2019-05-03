@@ -109,13 +109,14 @@ $(document).ready(function () {
         var citySearch = $("#location-input").val().trim();
         var category = $("#category-input").val().trim();
         clickSearch(citySearch, category);
+         
 
         // add to the database
         database.ref().push({
             city: citySearch,
             category: category
         });
-        console.log(testData);
+        //console.log(testData);
         console.log(locationData);
      });
 
@@ -126,24 +127,27 @@ $(document).ready(function () {
         var citySearch = $(this).attr("data-city");
         var category = $(this).attr("data-category");
         clickSearch(citySearch, category, thisElement);
-        console.log(testData);
+        //console.log(testData);
         console.log(locationData);
+        
      });
     
      var clickSearch = function (citySearch, category) {
+       locationData.data = []
         $("#details-div").empty();
+             
         map.remove();
         var newMap = $("<div>");
         newMap.attr("id", "map");
         newMap.attr("style", "height:500px");
         $("#add-map").append(newMap);
-
+      
         $.ajax({
             method: "GET",
             url: "https://developers.zomato.com/api/v2.1/locations?query=" + citySearch,
             headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
         }).then(function (response) {
-            console.log(response);
+            //console.log(response);
             var locationNum = response.location_suggestions.length;
             if (thisElement === "search") { // check to see if the clicked on element is the #search button
                 if (response.location_suggestions.length > 0) {
@@ -216,22 +220,26 @@ $(document).ready(function () {
                     
                 });
                 var detailArray = [];
-                console.log(detailArray);
+                console.log("detailArray: " + detailArray);
                 detailArray.push(r1[0]);
 
               detailArray.forEach(function (response) {
                     for (i = 0; i < response.restaurants.length; i++) {
                         var name = response.restaurants[i].restaurant.name;
                         var address = response.restaurants[i].restaurant.location.address;
-                        var nameAddress = { "name": name, "address": address, "count": 1 };
+                        var nameAddress = { "Location": name, "Address": address, "count": 1 };
                         locationData.data.push(nameAddress);
-                       // $("#details-div").empty();
-                        $("#details-div" ).append(name, address);
-                    
+                       $("#details-div" ).append(name, address);
+                        addRow(response);
+                       
+                        
                       
                     }
-                   
+                    function addRow(response) {
+                      $("tbody").append("<tr><td>" + response.restaurants[i].restaurant.name + "</td><td>" +response.restaurants[i].restaurant.location.address  + "</td></tr>");
+                    }
                 });
+               
                       
                 // leaflet code
                 var lat = cityLat;
