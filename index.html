@@ -25,7 +25,11 @@
     <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest-maps.css" />
     <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest-maps.js"></script>
     <!-- CSS  -->
-    <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+    <script src="assets/javascript/details.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest-maps.css" />
+    <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest-maps.js"></script>
+    <!-- CSS this needs to get changed to the current bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
@@ -38,8 +42,6 @@
             <h1 class="display-4">What's Hot?</h1>
         </div>
     </div>
-
-
     <div class="container">
         <div class="row">
             <div class="col-sm-4">
@@ -73,9 +75,10 @@
                                     <input type="checkbox" class="form-check-input" id="search-save-checkbox">
                                     <label class="form-check-label" for="exampleCheck1">Save This Search</label>
                                 </div>
-                                <button type="button" class="btn btn-primary btn-lg" id="search" data-saved="false">Search</button>
+                                <button type="button" class="btn btn-primary btn-lg" id="search"
+                                    data-saved="false">Search</button>
                             </form>
-        
+    
                         </div>
                     </div>
                 </div>
@@ -96,15 +99,20 @@
                     </div>
                     <div id="add-map" class="card-body">
                         <div id="map" style="height:500px">
-            
+    
                         </div>
                     </div>
                 </div>
             </div>
-        
-        
+    
+    
         </div>
     </div>
+
+    </div>
+    <br>
+    <div id="details-div" div class="card"></div>
+
 </body>
 
 </html>
