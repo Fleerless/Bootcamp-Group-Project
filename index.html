@@ -22,6 +22,9 @@
     <script src="assets/javascript/leaflet-heatmap.js"></script>
     <!-- <script src="assets/javascript/mikesCode.js"></script> -->
     <script src="assets/javascript/myHeatmap.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest-maps.css" />
+    <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest-maps.js"></script>
+    <!-- CSS  -->
     <script src="assets/javascript/details.js"></script>
 
     <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest-maps.css" />
@@ -29,7 +32,6 @@
     <!-- CSS this needs to get changed to the current bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
 
 </head>
@@ -39,74 +41,78 @@
         <div class="container">
             <h1 class="display-4">What's Hot?</h1>
         </div>
-    </div
-
-
-    <div class="row">
-        <div class="card col-sm-4">
-            <div class="card-header">
-                Saved Searches
-            </div>
-            <div class="card-body" id="saved-searches">
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="panel panel-warning">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
-                        Search A City
-                    </h3>
-                </div>
-                <div class="panel-body">
-                    <form class="search">
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Search (City, State)</label>
-                            <input type="email" class="form-control" id="location-input" aria-describedby="emailHelp"
-                                placeholder="ex. Denver, CO">
-                                <small id="search-warning" class="form-text text-danger" style="display: none">Search Failed</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleFormControlSelect1">Category</label>
-                            <select class="form-control" id="category-input">
-                                <option>Breakfast</option>
-                                <option>Lunch</option>
-                                <option>Dinner</option>
-                                <option>Pubs & Bars</option>
-                                <option>Clubs & Lounges</option>
-                            </select>
-                        </div>
-                        <div class="form-group form-check">
-                            <input type="checkbox" class="form-check-input" id="search-save-checkbox">
-                            <label class="form-check-label" for="exampleCheck1">Save This Search</label>
-                        </div>
-                        <button type="button" class="btn btn-primary" id="search" data-saved="false">Search</button>
-                    </form>
-
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-8">
-            <div id="add-map" class="panel panel-warning">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
-                        Map
-                    </h3>
-                </div>
-                <div id="map" style="height:500px">
-
-                </div>
-            </div>
-        </div>
-
-
     </div>
-
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            Search A City
+                        </h3>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <form class="search">
+                                <div class="form-group">
+                                    <label for="input-search">Search (City, State)</label>
+                                    <input type="text" class="form-control" id="location-input" aria-describedby="search"
+                                        placeholder="ex. Denver, CO">
+                                    <small id="search-warning" class="form-text text-danger" style="display: none">Search
+                                        Failed</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect1">Category</label>
+                                    <select class="form-control" id="category-input">
+                                        <option>Breakfast</option>
+                                        <option>Lunch</option>
+                                        <option>Dinner</option>
+                                        <option>Pubs & Bars</option>
+                                        <option>Clubs & Lounges</option>
+                                    </select>
+                                </div>
+                                <div class="form-group form-check">
+                                    <input type="checkbox" class="form-check-input" id="search-save-checkbox">
+                                    <label class="form-check-label" for="exampleCheck1">Save This Search</label>
+                                </div>
+                                <button type="button" class="btn btn-primary btn-lg" id="search"
+                                    data-saved="false">Search</button>
+                            </form>
     
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Saved Searches</h3>
+                    </div>
+                    <div class="card-body" id="saved-searches">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            Map
+                        </h3>
+                    </div>
+                    <div id="add-map" class="card-body">
+                        <div id="map" style="height:500px">
+    
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+    
+        </div>
+    </div>
 
     </div>
     <br>
-    <div id="details-div" div class = "card"    ></div>
-    
+    <div id="details-div" div class="card"></div>
+
 </body>
 
 </html>
