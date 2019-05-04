@@ -108,15 +108,7 @@ $(document).ready(function () {
         var thisElement = $(this).attr("id");
         var citySearch = $("#location-input").val().trim();
         var category = $("#category-input").val().trim();
-        clickSearch(citySearch, category);
-
-        // add to the database
-        database.ref().push({
-            city: citySearch,
-            category: category
-        });
-        console.log(testData);
-        console.log(locationData);
+        clickSearch(citySearch, category, thisElement);
      });
 
     // onclick for the saved search button which DOES NOT update the database
@@ -130,7 +122,7 @@ $(document).ready(function () {
         console.log(locationData);
      });
     
-     var clickSearch = function (citySearch, category) {
+     var clickSearch = function (citySearch, category, thisElement) {
         $("#details-div").empty();
         map.remove();
         var newMap = $("<div>");
