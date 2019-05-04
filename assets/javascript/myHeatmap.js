@@ -44,6 +44,7 @@ $(document).ready(function () {
         closeButton.append(closeAriaSpan);
         bodyDiv.append(headerTag, paragraphTag, searchButton);
         wrapperDiv.append(closeButton, bodyDiv);
+        console.log("wrapperDiv: ", wrapperDiv);
         $("#saved-searches").append(wrapperDiv);
 
     });
@@ -100,24 +101,20 @@ $(document).ready(function () {
     var cityLat;
     var cityLong;
     var cityId;
+    var isChecked;
 
     // onclick for the initial search button which DOES update the database
     $("body").on("click", "#search", function () {
-        var isChecked = document.getElementById("search-save-checkbox").checked;
+        isChecked = document.getElementById("search-save-checkbox").checked;
+        console.log("isChecked: ", isChecked);
         testData.data.length = 0; // delete the lat/long data
         var thisElement = $(this).attr("id");
         var citySearch = $("#location-input").val().trim();
         var category = $("#category-input").val().trim();
-        clickSearch(citySearch, category);
+        clickSearch(citySearch, category, thisElement);
 
-        // add to the database
-        database.ref().push({
-            city: citySearch,
-            category: category
-        });
-        console.log(testData);
-        console.log(locationData);
-     });
+
+    });
 
     // onclick for the saved search button which DOES NOT update the database
     $("body").on("click", "#saved-search", function () {
@@ -126,11 +123,9 @@ $(document).ready(function () {
         var citySearch = $(this).attr("data-city");
         var category = $(this).attr("data-category");
         clickSearch(citySearch, category, thisElement);
-        console.log(testData);
-        console.log(locationData);
-     });
-    
-     var clickSearch = function (citySearch, category) {
+    });
+
+    var clickSearch = function (citySearch, category, thisElement) {
         $("#details-div").empty();
         map.remove();
         var newMap = $("<div>");
@@ -143,13 +138,15 @@ $(document).ready(function () {
             url: "https://developers.zomato.com/api/v2.1/locations?query=" + citySearch,
             headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
         }).then(function (response) {
-            console.log(response);
             var locationNum = response.location_suggestions.length;
             if (thisElement === "search") { // check to see if the clicked on element is the #search button
                 if (response.location_suggestions.length > 0) {
-                    $("small").css("display", "none");
+                    $("#search-warning").css("display", "none");
+                    $("#results-table").css("display", "block");
+
                 } else {
-                    $("small").css("display", "block");
+                    $("#search-warning").css("display", "block");
+                    $("#results-table").css("display", "none");
                 }
             }
             if (thisElement === "search") { // check to see if the save this search checkbox is checked
@@ -164,8 +161,6 @@ $(document).ready(function () {
             cityLat = response.location_suggestions[0].latitude;
             cityLong = response.location_suggestions[0].longitude;
             cityId = (response.location_suggestions[0].city_id).toString();
-            console.log("response: ", response);
-            console.log("city id: ", cityId);
 
         }).then(function () {
 
@@ -197,11 +192,9 @@ $(document).ready(function () {
 
 
             $.when(ajax1, ajax2, ajax3, ajax4, ajax5).done(function (r1, r2, r3, r4, r5) {
-                console.log("r1: ", r1);
                 // r1 is the response, r1[0] is where the data is in a .when() call. 
                 // check the log for the response 
                 var responseArray = [];
-                //console.log(responseArray);
                 responseArray.push(r1[0], r2[0], r3[0], r4[0], r5[0]);
                 responseArray.forEach(function (response) {
                     for (i = 0; i < response.restaurants.length; i++) {
@@ -211,28 +204,42 @@ $(document).ready(function () {
                         var long = parseFloat(longString);
                         var latLong = { "latitude": lat, "longitude": long, "count": 1 };
                         testData.data.push(latLong);
-                     
+
                     }
-                    
+
                 });
                 var detailArray = [];
-                console.log(detailArray);
-                detailArray.push(r1[0]);
+                console.log("detail Array: ", detailArray);
+                detailArray.push(r1[0], r2[0], r3[0], r4[0], r5[0]);
 
-              detailArray.forEach(function (response) {
+                detailArray.forEach(function (response) {
                     for (i = 0; i < response.restaurants.length; i++) {
-                        var name = response.restaurants[i].restaurant.name;
-                        var address = response.restaurants[i].restaurant.location.address;
-                        var nameAddress = { "name": name, "address": address, "count": 1 };
-                        locationData.data.push(nameAddress);
-                       // $("#details-div").empty();
-                        $("#details-div" ).append(name, address);
-                    
-                      
-                    }
-                   
+                        // Grab location rating from JSON and check if it's above 4
+                        var rating = response.restaurants[i].restaurant.user_rating.aggregate_rating;
+                        if (rating > 4){
+                            // Grab rest of JSON data
+                            var name = response.restaurants[i].restaurant.name;
+                            var address = response.restaurants[i].restaurant.location.address;
+                            var nameAddress = { "name": name, "address": address, "count": 1 };
+
+                            // Create a Table Row to append to the table after it has been loaded with data
+                            var tableRow = $("<tr>");
+                            // Create table elements to store JSON data
+                            var nameTD = $("<td>");
+                            nameTD.html(name);
+                            var addressTD = $("<td>");
+                            addressTD.html(address);
+                            var ratingTD = $("<td>");
+                            ratingTD.html(rating);
+                            tableRow.append(nameTD, addressTD, ratingTD);
+                            locationData.data.push(nameAddress);
+                            $("#details-div").append(tableRow);
+
+
+                    }}
+
                 });
-                      
+
                 // leaflet code
                 var lat = cityLat;
                 var long = cityLong;

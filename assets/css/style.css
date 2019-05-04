@@ -76,3 +76,39 @@ body {
 button:hover {
     opacity: 0.8;
 }
+td {
+    padding-right: 30px;
+}
+#table-container {
+    display: flex;
+    justify-content: center;
+}
+#results-table {
+    display: none;
+}
+thead {
+    font-size: 22px;
+}
+#details-div {
+    display: block;
+    height: 200px;
+    overflow: scroll;
+}
+th:nth-child(1){
+    width: 30%;
+}
+th:nth-child(2){
+    width: 60%:
+}
+th:nth-child(3){
+    width: 10%;
+}
+td:nth-child(1){
+    width: 30%;
+}
+td:nth-child(2){
+    width: 60%:
+}
+td:nth-child(3){
+    width: 10%;
+}
