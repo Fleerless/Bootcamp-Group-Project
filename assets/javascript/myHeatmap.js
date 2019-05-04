@@ -85,7 +85,7 @@ $(document).ready(function () {
     var heatmapLayer = new HeatmapOverlay(cfg); // check console.log to see that heatmapLayer is mutable!!! 
 
     // zomato code
-    var zomatoKey = "c7db9a7567a1e0278cfd9829e1435aa1";
+    var zomatoKey = "5bb90f13f14bd704f6c55fa5a4cdd8e6";
     var testData = {
         max: 100,
         data: []
@@ -136,7 +136,7 @@ $(document).ready(function () {
         $.ajax({
             method: "GET",
             url: "https://developers.zomato.com/api/v2.1/locations?query=" + citySearch,
-            headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
+            headers: { "user-key": "5bb90f13f14bd704f6c55fa5a4cdd8e6" }
         }).then(function (response) {
             var locationNum = response.location_suggestions.length;
             if (thisElement === "search") { // check to see if the clicked on element is the #search button
@@ -167,27 +167,27 @@ $(document).ready(function () {
             var ajax1 = $.ajax({
                 method: "GET",
                 url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q=" + category + "&start=0",
-                headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
+                headers: { "user-key": "5bb90f13f14bd704f6c55fa5a4cdd8e6" }
             }),
                 ajax2 = $.ajax({
                     method: "GET",
                     url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q=" + category + "&start=20",
-                    headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
+                    headers: { "user-key": "5bb90f13f14bd704f6c55fa5a4cdd8e6" }
                 }),
                 ajax3 = $.ajax({
                     method: "GET",
                     url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q=" + category + "&start=40",
-                    headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
+                    headers: { "user-key": "5bb90f13f14bd704f6c55fa5a4cdd8e6" }
                 }),
                 ajax4 = $.ajax({
                     method: "GET",
                     url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q=" + category + "&start=60",
-                    headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
+                    headers: { "user-key": "5bb90f13f14bd704f6c55fa5a4cdd8e6" }
                 }),
                 ajax5 = $.ajax({
                     method: "GET",
                     url: "https://developers.zomato.com/api/v2.1/search?entity_id=" + cityId + "&entity_type=city&q=" + category + "&start=80",
-                    headers: { "user-key": "c7db9a7567a1e0278cfd9829e1435aa1" }
+                    headers: { "user-key": "5bb90f13f14bd704f6c55fa5a4cdd8e6" }
                 });
 
 
